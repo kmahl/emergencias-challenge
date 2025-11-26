@@ -13,7 +13,7 @@ API RESTful para gestión de agenda de contactos con actividades, desarrollada c
 - ✅ Registro de actividades (llamadas, reuniones, emails)
 - ✅ Búsqueda dinámica (?q= o parámetros específicos)
 - ✅ Documentación con Swagger (`/api-docs`)
-- ✅ Tests unitarios con Jest (80% coverage)
+- ✅ Tests unitarios con Jest
 - ✅ Arquitectura en capas (Repository + Service + Controller)
 - ✅ Validación con Zod
 - ✅ Docker y Docker Compose
@@ -75,11 +75,9 @@ GET    /api/phone-types      # Listar tipos disponibles
 ## 🧪 Tests
 
 ```bash
-npm test              # Ejecutar tests con coverage
+npm test              # Ejecutar tests
 npm run test:watch    # Modo watch
 ```
-
-**Coverage:** 80% (26 tests pasando)
 
 ## 🏗️ Arquitectura
 
