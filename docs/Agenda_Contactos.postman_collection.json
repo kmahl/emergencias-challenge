@@ -1,0 +1,1144 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Agenda de Contactos API",
+		"description": "Colección de pruebas para la API RESTful de gestión de contactos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Creación de un contacto",
+			"item": [
+				{
+					"name": "Crear contacto exitoso",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"email\": \"juan.perez@example.com\",\n  \"dateOfBirth\": \"15/03/1990\",\n  \"phones\": [\n    {\n      \"number\": \"555-1234\",\n      \"typeName\": \"mobile\"\n    },\n    {\n      \"number\": \"555-5678\",\n      \"typeName\": \"home\"\n    }\n  ],\n  \"addresses\": [\n    {\n      \"locality\": \"Madrid\",\n      \"street\": \"Calle Principal\",\n      \"number\": \"123\",\n      \"notes\": \"Edificio A, Piso 3\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear contacto - Email duplicado (409)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Otro\",\n  \"lastName\": \"Usuario\",\n  \"email\": \"juan.perez@example.com\",\n  \"dateOfBirth\": \"20/05/1985\",\n  \"phones\": [\n    {\n      \"number\": \"666-7777\",\n      \"typeName\": \"mobile\"\n    }\n  ],\n  \"addresses\": [\n    {\n      \"locality\": \"Barcelona\",\n      \"street\": \"Otra Calle\",\n      \"number\": \"456\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear contacto - Datos inválidos (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"María\",\n  \"email\": \"email-invalido\",\n  \"dateOfBirth\": \"invalid-date\",\n  \"phones\": [\n    {\n      \"number\": \"777-8888\",\n      \"typeName\": \"invalid-type\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear contacto - Campos requeridos faltantes (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Pedro\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear contacto - Tipo de teléfono no existe (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Ana\",\n  \"lastName\": \"García\",\n  \"email\": \"ana.garcia@example.com\",\n  \"dateOfBirth\": \"10/08/1995\",\n  \"phones\": [\n    {\n      \"number\": \"888-9999\",\n      \"typeName\": \"nonexistent\"\n    }\n  ],\n  \"addresses\": [\n    {\n      \"locality\": \"Valencia\",\n      \"street\": \"Calle Test\",\n      \"number\": \"789\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Búsqueda de contactos por datos personales",
+			"item": [
+				{
+					"name": "Buscar por nombre exitoso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?firstName=Juan",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Juan"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por apellido exitoso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?lastName=Pérez",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "lastName",
+									"value": "Pérez"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por nombre y apellido exitoso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?firstName=Juan&lastName=Pérez",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Juan"
+								},
+								{
+									"key": "lastName",
+									"value": "Pérez"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por fecha de nacimiento exitoso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?dateOfBirth=15/03/1990",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "dateOfBirth",
+									"value": "15/03/1990"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar - Sin parámetros (400)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar - Fecha inválida (400)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?dateOfBirth=invalid-date",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "dateOfBirth",
+									"value": "invalid-date"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar - No encontrado (200 array vacío)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?firstName=NoExiste&lastName=NoExiste",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "NoExiste"
+								},
+								{
+									"key": "lastName",
+									"value": "NoExiste"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Búsqueda dinámica de contactos",
+			"item": [
+				{
+					"name": "Búsqueda general con ?q=",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?q=Juan",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Juan"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Búsqueda por email específico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?email=juan.perez@example.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "juan.perez@example.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por teléfono y tipo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?phone=555-1234&phoneType=mobile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "phone",
+									"value": "555-1234"
+								},
+								{
+									"key": "phoneType",
+									"value": "mobile"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por nombre específico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?firstName=Juan",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Juan"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por datos personales combinados",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search?firstName=Juan&lastName=Pérez",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Juan"
+								},
+								{
+									"key": "lastName",
+									"value": "Pérez"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar sin parámetros (400)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/search",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Edición de los datos personales de un contacto",
+			"item": [
+				{
+					"name": "Actualizar contacto exitoso",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Juan Carlos\",\n  \"email\": \"juancarlos.perez@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar teléfonos y direcciones",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phones\": [\n    {\n      \"number\": \"555-9999\",\n      \"typeName\": \"mobile\"\n    },\n    {\n      \"number\": \"555-8888\",\n      \"typeName\": \"work\"\n    }\n  ],\n  \"addresses\": [\n    {\n      \"locality\": \"Madrid\",\n      \"street\": \"Nueva Calle\",\n      \"number\": \"999\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar contacto - No encontrado (404)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Test\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons/99999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"99999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar contacto - Email duplicado (409)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"juan.perez@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar contacto - Datos inválidos (400)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"email-invalido\",\n  \"dateOfBirth\": \"fecha-invalida\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar contacto - ID inválido (400)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Test\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/persons/invalid",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"invalid"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Eliminación de un contacto",
+			"item": [
+				{
+					"name": "Eliminar contacto exitoso",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar contacto - No encontrado (404)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/99999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"99999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar contacto - ID inválido (400)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/persons/invalid",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"persons",
+								"invalid"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Creación de una actividad",
+			"item": [
+				{
+					"name": "Crear actividad exitosa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"personId\": 1,\n  \"activityType\": \"call\",\n  \"activityDate\": \"25/11/2024 15:30:00\",\n  \"description\": \"Llamada de seguimiento\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear actividad tipo meeting",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"personId\": 1,\n  \"activityType\": \"meeting\",\n  \"activityDate\": \"26/11/2024 10:00:00\",\n  \"description\": \"Reunión inicial de proyecto\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear actividad tipo email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"personId\": 1,\n  \"activityType\": \"email\",\n  \"activityDate\": \"27/11/2024 09:15:00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear actividad - Persona no existe (404)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"personId\": 99999,\n  \"activityType\": \"call\",\n  \"activityDate\": \"25/11/2024 15:30:00\",\n  \"description\": \"Test\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear actividad - Tipo inválido (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"personId\": 1,\n  \"activityType\": \"invalid-type\",\n  \"activityDate\": \"25/11/2024 15:30:00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear actividad - Fecha inválida (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"personId\": 1,\n  \"activityType\": \"call\",\n  \"activityDate\": \"invalid-date\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear actividad - Campos requeridos faltantes (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"personId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Búsqueda de actividades",
+			"item": [
+				{
+					"name": "Buscar actividades por persona",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/activities/search?personId=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"search"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar actividades por persona y tipo call",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/activities/search?personId=1&activityType=call",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"search"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "1"
+								},
+								{
+									"key": "activityType",
+									"value": "call"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar actividades por persona y tipo meeting",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/activities/search?personId=1&activityType=meeting",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"search"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "1"
+								},
+								{
+									"key": "activityType",
+									"value": "meeting"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar actividades por persona y tipo email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/activities/search?personId=1&activityType=email",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"search"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "1"
+								},
+								{
+									"key": "activityType",
+									"value": "email"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar actividades - Persona no existe (404)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/activities/search?personId=99999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"search"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "99999"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar actividades - Falta personId (400)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/activities/search",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar actividades - Tipo inválido (400)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/activities/search?personId=1&activityType=invalid",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"search"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "1"
+								},
+								{
+									"key": "activityType",
+									"value": "invalid"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar actividades - Sin actividades (200 array vacío)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/activities/search?personId=1&activityType=meeting",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"search"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "1"
+								},
+								{
+									"key": "activityType",
+									"value": "meeting"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

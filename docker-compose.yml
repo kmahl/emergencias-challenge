@@ -1,0 +1,18 @@
+services:
+  api:
+    build: .
+    container_name: emergencias-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:./dev.db
+      - PORT=3000
+    volumes:
+      - ./prisma:/app/prisma
+      - db-data:/app
+    restart: unless-stopped
+    command: sh -c "npx prisma migrate deploy && npm start"
+
+volumes:
+  db-data:
